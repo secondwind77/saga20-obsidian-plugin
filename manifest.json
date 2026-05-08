@@ -1,0 +1,10 @@
+{
+  "id": "saga20",
+  "name": "Saga20",
+  "version": "0.1.0",
+  "minAppVersion": "1.4.0",
+  "description": "Browse and read your Saga20 tabletop campaign sessions.",
+  "author": "Saga20",
+  "authorUrl": "https://saga20.com",
+  "isDesktopOnly": true
+}
