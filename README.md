@@ -10,7 +10,7 @@ This is the official open-source Obsidian client for the Saga20 Public API. Issu
 
 - **Sidebar list:** every session in your campaign with date and status, filterable by title.
 - **Full-recap view:** opens any session in a tab and renders the complete `summary_markdown` (no 4096-char Discord limit).
-- **Quick open:** `Saga20: Open session…` opens a fuzzy-search palette over your sessions.
+- **Quick open:** `Saga20: Open session…` opens a search palette over your sessions.
 - **Save to vault:** drop a session into your vault as a real `.md` note with frontmatter (`saga20_id`, status, recording date, source URL).
 - **Cached index:** the session list is cached for 60s by default to keep things snappy.
 
@@ -77,19 +77,6 @@ This plugin talks to one external service: the Saga20 Public API at `https://app
 - All HTTP traffic uses Obsidian's `requestUrl` so requests honor Obsidian's network handling. No extra fetch shims.
 
 If you stop using the plugin, you can remove your API key from settings or delete the plugin folder entirely. Both wipe the stored key.
-
-## How it differs from the Discord bot
-
-Saga20 also has an official Discord bot. The trade-offs:
-
-| | Discord bot | Obsidian plugin |
-|---|---|---|
-| Auth scope | One key per Discord guild | One key per Obsidian vault |
-| Recap rendering | Embed, truncated to 4096 chars | Full markdown, rendered natively |
-| List paging | 25 per page (Discord limit) | All sessions in one filterable list |
-| Output | Ephemeral chat messages | Tabs + optional `.md` notes |
-
-The underlying API is the same: `https://app.saga20.com/api/public/v1`.
 
 ## Contributing
 
