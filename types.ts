@@ -1,6 +1,6 @@
-export type SessionStatus = "draft" | "processing" | "completed" | "failed" | string;
-export type SessionVisibility = "public" | "private" | string;
-export type SessionType = "audio" | "text_doc" | string;
+export type SessionStatus = "draft" | "processing" | "completed" | "failed" | (string & {});
+export type SessionVisibility = "public" | "private" | (string & {});
+export type SessionType = "audio" | "text_doc" | (string & {});
 
 export interface SessionSummary {
   id: string;
@@ -38,6 +38,6 @@ export const DEFAULT_SETTINGS: Saga20PluginSettings = {
   apiKey: "",
   apiBase: "https://app.saga20.com/api/public/v1",
   appBase: "https://app.saga20.com",
-  notesFolder: "Saga20 Sessions",
+  notesFolder: "Saga20 sessions",
   cacheTtlSeconds: 60,
 };

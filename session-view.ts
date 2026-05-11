@@ -70,13 +70,13 @@ export class Saga20SessionView extends ItemView {
       // The view body may not exist yet on first setState before onOpen.
       if (this.headerEl) this.renderHeader();
       if (this.bodyEl && this.sessionId) await this.fetchSession();
-      else if (this.bodyEl) this.renderBody();
+      else if (this.bodyEl) void this.renderBody();
     }
     await super.setState(state, result);
   }
 
   getState(): Record<string, unknown> {
-    return { ...(super.getState() as Record<string, unknown>), sessionId: this.sessionId };
+    return { ...super.getState(), sessionId: this.sessionId };
   }
 
   private async fetchSession() {
@@ -84,7 +84,7 @@ export class Saga20SessionView extends ItemView {
     this.loading = true;
     this.errorMessage = null;
     this.renderHeader();
-    this.renderBody();
+    void this.renderBody();
     try {
       this.session = await this.plugin.api.getSession(this.sessionId);
     } catch (err) {
@@ -125,22 +125,22 @@ export class Saga20SessionView extends ItemView {
 
     if (this.session) {
       const saveBtn = actions.createEl("button", { text: "Save to vault" });
-      saveBtn.addEventListener("click", async () => {
+      saveBtn.addEventListener("click", () => {
         if (!this.session) return;
-        await this.plugin.saveSessionToVault(this.session.id);
+        void this.plugin.saveSessionToVault(this.session.id);
       });
 
-      const copyBtn = actions.createEl("button", { text: "Copy markdown" });
-      copyBtn.addEventListener("click", async () => {
+      const copyBtn = actions.createEl("button", { text: "Copy Markdown" });
+      copyBtn.addEventListener("click", () => {
         if (!this.session) return;
         const md = this.session.summary_markdown || this.session.summary_text || "";
-        await navigator.clipboard.writeText(md);
-        new Notice("Saga20: copied recap markdown.");
+        void navigator.clipboard.writeText(md);
+        new Notice("Saga20: copied recap Markdown.");
       });
 
       const url = `${this.plugin.settings.appBase.replace(/\/$/, "")}/sessions/${this.session.id}`;
       const linkBtn = actions.createEl("a", {
-        text: "Open in Saga20",
+        text: "View on the web",
         href: url,
         cls: "external-link",
       });

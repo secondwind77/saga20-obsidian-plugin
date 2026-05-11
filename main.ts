@@ -58,25 +58,25 @@ export default class Saga20Plugin extends Plugin {
     });
 
     this.addCommand({
-      id: "saga20-browse-sessions",
+      id: "browse-sessions",
       name: "Browse sessions",
       callback: () => void this.activateSessionsView(),
     });
 
     this.addCommand({
-      id: "saga20-open-session",
+      id: "open-session",
       name: "Open session…",
       callback: () => void this.openSearchModal("open"),
     });
 
     this.addCommand({
-      id: "saga20-save-session-to-vault",
+      id: "save-session-to-vault",
       name: "Save session to vault…",
       callback: () => void this.openSearchModal("save"),
     });
 
     this.addCommand({
-      id: "saga20-refresh-sessions",
+      id: "refresh-sessions",
       name: "Refresh sessions cache",
       callback: () => void this.refreshSessions(true),
     });
@@ -157,7 +157,7 @@ export default class Saga20Plugin extends Plugin {
       leaf = left;
       await leaf.setViewState({ type: SAGA20_SESSIONS_VIEW_TYPE, active: true });
     }
-    workspace.revealLeaf(leaf);
+    void workspace.revealLeaf(leaf);
   }
 
   async openSessionView(id: string) {
@@ -183,7 +183,7 @@ export default class Saga20Plugin extends Plugin {
         state: { sessionId: id },
       });
     }
-    workspace.revealLeaf(leaf);
+    void workspace.revealLeaf(leaf);
   }
 
   async openSearchModal(mode: "open" | "save") {
@@ -220,7 +220,7 @@ export default class Saga20Plugin extends Plugin {
       return null;
     }
 
-    const folder = (this.settings.notesFolder || "Saga20 Sessions").trim() || "Saga20 Sessions";
+    const folder = (this.settings.notesFolder || "Saga20 sessions").trim() || "Saga20 sessions";
     const folderPath = normalizePath(folder);
     await this.ensureFolder(folderPath);
 
@@ -270,7 +270,7 @@ export default class Saga20Plugin extends Plugin {
 
 function sanitizeFileName(input: string): string {
   // Obsidian forbids: \ / : * ? " < > |  — replace with spaces, collapse whitespace.
-  const cleaned = input.replace(/[\\/:*?"<>|#\^\[\]]/g, " ").replace(/\s+/g, " ").trim();
+  const cleaned = input.replace(/[\\/:*?"<>|#^[\]]/g, " ").replace(/\s+/g, " ").trim();
   const trimmed = cleaned.length > 120 ? cleaned.slice(0, 120).trim() : cleaned;
   return trimmed || "Untitled session";
 }
@@ -321,10 +321,10 @@ class Saga20SettingTab extends PluginSettingTab {
 
     new Setting(containerEl)
       .setName("API key")
-      .setDesc("Your Saga20 Public API key (starts with 's20_live_').")
+      .setDesc("Saga20 public API key. The prefix is 's20_live_'.")
       .addText((text) =>
         text
-          .setPlaceholder("s20_live_…")
+          .setPlaceholder("Paste your API key here")
           .setValue(this.plugin.settings.apiKey)
           .onChange(async (value) => {
             this.plugin.settings.apiKey = value.trim();
@@ -336,7 +336,7 @@ class Saga20SettingTab extends PluginSettingTab {
 
     new Setting(containerEl)
       .setName("Test connection")
-      .setDesc("Verify the API key against Saga20.")
+      .setDesc("Saga20: verify the API key.")
       .addButton((btn) =>
         btn
           .setButtonText("Test")
@@ -359,7 +359,7 @@ class Saga20SettingTab extends PluginSettingTab {
       .setDesc("Folder where saved sessions are written.")
       .addText((text) =>
         text
-          .setPlaceholder("Saga20 Sessions")
+          .setPlaceholder("Saga20 sessions")
           .setValue(this.plugin.settings.notesFolder)
           .onChange(async (value) => {
             this.plugin.settings.notesFolder = value;
@@ -368,8 +368,8 @@ class Saga20SettingTab extends PluginSettingTab {
       );
 
     new Setting(containerEl)
-      .setName("Cache TTL (seconds)")
-      .setDesc("How long to cache the session list before refetching. 0 disables caching.")
+      .setName("Cache duration (seconds)")
+      .setDesc("How long to cache the session list before refetching; 0 disables caching.")
       .addText((text) =>
         text
           .setPlaceholder("60")
@@ -383,7 +383,7 @@ class Saga20SettingTab extends PluginSettingTab {
 
     new Setting(containerEl)
       .setName("API base URL")
-      .setDesc("Override only if Saga20 tells you to.")
+      .setDesc("Override only if instructed.")
       .addText((text) =>
         text
           .setPlaceholder(DEFAULT_SETTINGS.apiBase)
@@ -397,7 +397,7 @@ class Saga20SettingTab extends PluginSettingTab {
 
     new Setting(containerEl)
       .setName("App base URL")
-      .setDesc("Used when linking back to the Saga20 web app.")
+      .setDesc("Used to build links back to the web app.")
       .addText((text) =>
         text
           .setPlaceholder(DEFAULT_SETTINGS.appBase)
