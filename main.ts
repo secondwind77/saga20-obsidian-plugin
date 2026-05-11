@@ -53,7 +53,7 @@ export default class Saga20Plugin extends Plugin {
       (leaf) => new Saga20SessionView(leaf, this),
     );
 
-    this.addRibbonIcon("scroll-text", "Saga20: Browse sessions", () => {
+    this.addRibbonIcon("scroll-text", "Saga20: browse sessions", () => {
       void this.activateSessionsView();
     });
 
@@ -106,10 +106,10 @@ export default class Saga20Plugin extends Plugin {
     this.indexFetchedAt = 0;
   }
 
-  async getSessions(force = false): Promise<SessionSummary[]> {
+  getSessions(force = false): Promise<SessionSummary[]> {
     const ttlMs = Math.max(0, this.settings.cacheTtlSeconds) * 1000;
     const fresh = this.indexCache && Date.now() - this.indexFetchedAt < ttlMs;
-    if (!force && fresh && this.indexCache) return this.indexCache;
+    if (!force && fresh && this.indexCache) return Promise.resolve(this.indexCache);
     if (this.indexInflight) return this.indexInflight;
 
     this.indexInflight = (async () => {
@@ -225,7 +225,7 @@ export default class Saga20Plugin extends Plugin {
     await this.ensureFolder(folderPath);
 
     const baseName = sanitizeFileName(session.title || `Session ${session.id.slice(0, 8)}`);
-    const filePath = await this.uniquePath(`${folderPath}/${baseName}.md`);
+    const filePath = this.uniquePath(`${folderPath}/${baseName}.md`);
 
     const content = renderSessionMarkdown(session, this.settings.appBase);
 
@@ -255,7 +255,7 @@ export default class Saga20Plugin extends Plugin {
     await this.app.vault.createFolder(path);
   }
 
-  private async uniquePath(path: string): Promise<string> {
+  private uniquePath(path: string): string {
     if (!this.app.vault.getAbstractFileByPath(path)) return path;
     const dot = path.lastIndexOf(".");
     const stem = dot === -1 ? path : path.slice(0, dot);
@@ -315,9 +315,9 @@ class Saga20SettingTab extends PluginSettingTab {
     containerEl.empty();
 
     const intro = containerEl.createEl("p");
-    intro.appendText("Connect Obsidian to your Saga20 campaign. Create a Public API key at ");
-    intro.createEl("a", { text: "app.saga20.com", href: "https://app.saga20.com" });
-    intro.appendText(" and paste it below.");
+    intro.appendText("Paste your Saga20 public API key below. Create one at ");
+    intro.createEl("a", { text: "Saga20 web app", href: "https://app.saga20.com" });
+    intro.appendText(".");
 
     new Setting(containerEl)
       .setName("API key")

@@ -60,8 +60,8 @@ export class Saga20SessionsView extends ItemView {
     await this.refresh(false);
   }
 
-  async onClose(): Promise<void> {
-    // Nothing to clean up — listeners live on the elements which Obsidian disposes.
+  onClose(): Promise<void> {
+    return Promise.resolve();
   }
 
   onSessionsUpdated(sessions: SessionSummary[]) {

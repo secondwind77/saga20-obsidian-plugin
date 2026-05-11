@@ -57,8 +57,9 @@ export class Saga20SessionView extends ItemView {
     if (this.sessionId) await this.fetchSession();
   }
 
-  async onClose(): Promise<void> {
+  onClose(): Promise<void> {
     this.disposeRenderChild();
+    return Promise.resolve();
   }
 
   async setState(state: State, result: ViewStateResult): Promise<void> {

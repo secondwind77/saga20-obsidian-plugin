@@ -54,7 +54,7 @@ export class Saga20Api {
     }
   }
 
-  async listSessionsPage(cursor?: string | null): Promise<PaginatedSessions> {
+  listSessionsPage(cursor?: string | null): Promise<PaginatedSessions> {
     const qs = cursor
       ? `?limit=${PAGE_SIZE}&cursor=${encodeURIComponent(cursor)}`
       : `?limit=${PAGE_SIZE}`;
@@ -76,7 +76,7 @@ export class Saga20Api {
     return all;
   }
 
-  async getSession(id: string): Promise<SessionDetail> {
+  getSession(id: string): Promise<SessionDetail> {
     return this.request<SessionDetail>(`/sessions/${encodeURIComponent(id)}`);
   }
 

@@ -9,6 +9,9 @@ export default [
       parser: tsparser,
       parserOptions: { project: "./tsconfig.json" },
     },
+    rules: {
+      "require-await": "error",
+    },
   },
   {
     ignores: ["main.js", "node_modules/**", "dist/**"],
